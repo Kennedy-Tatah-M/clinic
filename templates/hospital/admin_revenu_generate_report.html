@@ -1,0 +1,88 @@
+{% extends 'hospital/admin_base.html' %}
+{% block content %}
+  {% load static %}
+
+  <head>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <style media="screen">
+      a:link {
+        text-decoration: none;
+      }
+      
+      h6 {
+        text-align: center;
+      }
+      
+      .row {
+        margin: 100px;
+      }
+    </style>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="{% static 'admin_revenu/cdn_query.js' %}"></script>
+    {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> {% endcomment %}
+
+    {% comment %} <script>
+      $(document).ready(function () {
+        var x
+        var total_expense = 0
+        $('td:nth-child(5)').each(function () {
+          x = $(this).html()
+          total_expense += parseInt(x)
+      
+          $('#total_income4').text(total_expense)
+        })
+      })
+    </script> {% endcomment %}
+  </head>
+
+  <div class="container">
+    <form method="post" action="{% url "admin-revenu-generate-report" %}">
+      {% csrf_token %}
+      <div class="container input-group date">
+        <strong>From :</strong><input type="date" name="fromDate" class="p-2" />
+        <strong>To :</strong><input type="date" name="toDate" class="p-2" />&nbsp<input type="submit" value="search" class="p-3 btn btn-primary" />
+      </div>
+   
+      <br />&nbsp
+      {% comment %} <button class="btn btn-secondary"><a href="/admin-revenu-generate-report" style="color: whitesmoke;"><span>Report</span></a></button> {% endcomment %}
+      <hr />
+
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h6 class="panel-title">Income</h6>
+        </div>
+        <table class="table table-hover" id="dev-table" style="text-align: center;">
+          <thead>
+            <tr>
+              <th>Patient Name</th>
+              <th>Treatement Income</th>
+              <th>Medicine Income</th>
+              <th>Consultation Income</th>
+              <th>Total</th>
+              <th>Deposite Date</th>
+            </tr>
+          </thead>
+          {% for d in patient %}
+            <tr>
+              <td>{{ d.user.username }}</td>
+              <td>{{ d.newAdvance }}</td>
+              <td>{{ d.newMedicineCost }}</td>
+              <td>{{ d.newConsultation }}</td>
+              <td>{{ d.newTotal }}</td>
+              <td>{{ d.admitDate }}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="1" style="font-weight: bold;">Total Income In F CFA :</td>
+            <td name="total_advance" id="treatment_income" style="font-weight: bold;" value={{total_advance}}>{{total_advance}}</td>
+            <td name="total_medicineCost" id="medicine_income" style="font-weight: bold;" value={{total_medicineCost}}>{{total_medicineCost}}</td>
+            <td name="total_othercharge" id="other_income" style="font-weight: bold;" value={{total_othercharge}}>{{total_othercharge}}</td>
+            <td name="total_t" id="total_income4" style="font-weight: bold;" value={{total}}>{{total}}</td>
+          </tr>
+        </table>
+      </div>
+    </form>
+  </div>
+{% endblock %}

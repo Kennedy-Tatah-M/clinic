@@ -1,0 +1,104 @@
+{% extends 'hospital/admin_base.html' %}
+{% block content %}
+{%load static%}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+  </style>
+  <script src="{% static 'admin_revenu/cdn_query.js' %}"></script>
+    <script>
+      $(document).ready(function(){
+        var expense;
+        var total_expense=0
+        $('td:nth-child(3)').each(function(){
+          expense = $(this).html();
+          total_expense += parseInt(expense);
+          $('#total_expense').text(total_expense);
+        });
+      });
+    </script>
+
+    
+</head>
+
+<div class="container">
+  <form method="post" action="{% url "admin-expense-generate-report" %}">
+    {% csrf_token %}
+    <div class="container input-group date">
+      <input class="p-2 mr-sm-2" type="search" placeholder="Search Expense" name="query" id="query" aria-label="Search">
+      <strong>From : </strong><input type="date" name="fromDate" class="p-2"/>
+      <strong>To : </strong><input type="date" name="toDate" class="p-2" />&nbsp
+      
+      <input type="submit" value="SEARCH" class="p-3  btn btn-primary">
+      
+    </div>
+  </form>
+  <br>&nbsp
+  
+  <br>
+  {% comment %} <div class="download">
+    <a style="background:red; width:500px;" href="{% url 'admin-expense-generate-report' %}">Download</a>
+  </div> {% endcomment %}
+  <hr />
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Expenses</h6>
+    </div>
+    <table class="table table-hover" id="dev-table">
+      <thead>
+        <tr>
+          <th>User Name</th>
+          <th>Expense Type</th>
+          <th>Amount</th>
+          <th>Reason</th>
+          <th>Expense Date</th>
+          
+          <th>Update</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      {% for d in expense %}
+      <tr>
+        <td> {{d.user.username}}</td>
+        <td name="">{{d.type_expense}}</td>
+        <td name="amount">{{d.amount}}</td>
+        <td name="">{{d.description}}</td>
+        <td>{{d.ExpenseDate}}</td>
+        
+        
+        <td><a class="btn btn-primary btn-xs" href="{% url 'update-expense' d.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
+        <td><a class="btn btn-danger btn-xs" href="{% url 'delete-expense' d.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td colspan="2">Total Expense</td>
+        <td id="total_expense" name="total_expense" style="font-weight: bold;"><input type="text" name="total_expense" id="total_expense">{{amount}}</td>
+        
+      </tr>
+    </table>
+    
+  </div>
+</div>
+<script>
+  {%if messages %}
+  {%for message in messages%}
+  alert('{{message}}');
+  {%endfor%}
+  {%endif%}
+</script>
+{% endblock content %}

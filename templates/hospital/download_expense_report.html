@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <style>
+      .invoice {
+        max-width: 800px;
+        margin: auto;
+        padding: 30px;
+        border: 1px solid #eee;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        font-size: 16px;
+        line-height: 24px;
+        font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+        color: #555;
+      }
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+      
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+      
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+    </style>
+
+    <script src="{% static 'admin_revenu/cdn_query.js' %}"></script>
+    <script>
+      $(document).ready(function () {
+        var expense
+        var total_expense = 0
+        $('td:nth-child(4)').each(function () {
+          expense = $(this).html()
+          total_expense += parseInt(expense)
+          $('#total_expense').text(total_expense)
+        })
+      })
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        var desc_expense
+        var total_expense = 0
+        $('td:nth-child(3)').each(function () {
+          desc = $(this).html()
+          desc_expense += parseInt(desc_expense)
+          $('#desc').text(desc_expense)
+        })
+      })
+    </script>
+  </head>
+  <body>
+    <div class="invoice">
+      <h2>CENTRE DE SANTE SAREF Management</h2>
+      <h3>Expense Date: {{ expenseDateTime }}</h3>
+
+      <table>
+        <tr>
+          <th>User Name</th>
+          <th>Expense Type</th>
+          <th>Reason</th>
+          <th>Expense Date</th>
+          <th>Amount</th>
+        </tr>
+        {% for d in expense %}
+          <tr>
+            <td>{{ d.user.username }}</td>
+            <td>{{ d.type_expense }}</td>
+            <td >{{d.description}}</td>
+            <td>{{ d.ExpenseDate }}</td>
+            <td>{{ d.amount }}</td>
+          </tr>
+        {% endfor %}
+        
+      </table>
+      <tr>
+        <td colspan="5">Total Expense In F CFA  &nbsp &nbsp &nbsp </td>
+        <td id="total_expense" style="font-weight: bold;">{{total_expense}}</td>
+      </tr>
+    </div>
+  </body>
+</html>

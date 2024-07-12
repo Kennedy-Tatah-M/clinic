@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <style>
+      .invoice {
+        max-width: 800px;
+        margin: auto;
+        padding: 30px;
+        border: 1px solid #eee;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        font-size: 16px;
+        line-height: 24px;
+        font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+        color: #555;
+      }
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+      
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+      
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+    </style>
+
+    <script src="{% static 'admin_revenu/cdn_query.js' %}"></script>
+    
+
+    {% comment %} <script>
+      $(document).ready(function () {
+        var expense
+        var total_expense = 0
+        $('td:nth-child(2)').each(function () {
+          expense = $(this).html()
+          total_expense += parseInt(expense)
+          $('#treatment_income').text(total_expense)
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        var expense
+        var total_expense = 0
+        $('td:nth-child(3)').each(function () {
+          expense = $(this).html()
+          total_expense += parseInt(expense)
+          $('#medicine_income').text(total_expense)
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        var expense
+        var total_expense = 0
+        $('td:nth-child(4)').each(function () {
+          expense = $(this).html()
+          total_expense += parseInt(expense)
+          $('#other_income').text(total_expense)
+        });
+      });
+    </script>
+
+    <script>
+      $(document).ready(function () {
+        var expense
+        var total_expense = 0
+        $('td:nth-child(5)').each(function () {
+          expense = $(this).html()
+          total_expense += parseInt(expense)
+          $('#total_income4').text(total_expense)
+        });
+      });
+    </script> {% endcomment %}
+  </head>
+  <body>
+    
+    <div class="invoice">
+      <h2>CENTRE DE SANTE SAREF Management</h2>
+      <h3>Income Date: {{ incomeDate }}</h3>
+
+      <table>
+        <tr>
+          <th>Patient Name</th>
+          <th>Treatement Income</th>
+          <th>Medicine Income</th>
+          <th>Consultation Income</th>
+          <th>Total</th>
+          <th>Deposite Date</th>
+        </tr>
+        {% for d in patient %}
+          <tr>
+            <td>{{ d.user.username }}</td>
+              <td>{{ d.newAdvance }}</td>
+              <td>{{ d.newMedicineCost }}</td>
+              <td>{{ d.newConsultation }}</td>
+              <td>{{ d.newTotal }}</td>
+              <td>{{ d.updateDate }}</td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="0" style="font-weight: bold;">Total Income In F CFA :</td>
+          <td style="font-weight: bold;"><input type="text" value={{total_advance}}>{{total_advance}}</td>
+          <td style="font-weight: bold;"><input type="text" value={{total_medicineCost}}>{{total_medicineCost}}</td>
+          <td style="font-weight: bold;"><input type="text" value={{total_othercharge}}>{{total_othercharge}}</td>
+          <td style="font-weight: bold;"><input type="text" value={{total}}>{{total}}</td>
+        </tr>
+        
+      </table>
+      
+    </div>
+  </body>
+</html>
